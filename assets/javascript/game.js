@@ -45,8 +45,9 @@ var players = [
     },
 ];
 
-var myCharacter = false;
-var opponent = false;
+var myCharacter;
+var opponent;
+var hasOpponent=false;
 var defeatedEnemies =[];
 var chars=[];
 
@@ -172,12 +173,14 @@ function start(){
 
             for (let index = 0; index < chars.length; index++) {
                 const element = chars[index];
-                var playerIndex = parseInt(myCharacter.attr("char-index"));
+                var playerIndex = parseInt(target.attr("char-index"));
                 if (index === playerIndex){
                     element.becomePlayer();
+                    // console.log("my character: " + element.name);
                 }
                 else{
                     element.makeEnemy();
+                    // console.log("my enemies: " + element.name);
                     var enemy = $("#" + element.idTag);
                     enemy.detach();
                     enemy.addClass("enemy");
@@ -188,6 +191,7 @@ function start(){
         }  
         else if(chars[target.attr("char-index")].role === "enemy" && !opponent){
             opponent = $(this);
+            hasOpponent = true;
             opponent.detach();
             opponent.addClass("opponent");
             opponent.appendTo("#opponent");
@@ -201,9 +205,11 @@ function start(){
       if (opponent){
           $("#battle-stats").empty();
           var attacker = chars[myCharacter.attr("char-index")];
-          var opponent = chars[opponent.attr("char-index")];
-          attacker.attack(opponent);
-          if (opponent.isDead()){
+          console.log("my character: " + attacker);
+          var enemyOpp = chars[opponent.attr("char-index")];
+          console.log("opponent: " + opponent);
+          attacker.attack(enemyOpp);
+          if (enemyOpp.isDead()){
               opponent.detach();
               defeatedEnemies.push(opponent);
 
