@@ -14,6 +14,7 @@ var players = [
         healthPoint:100,
         attackPower:15,
         counterAttackPower:5,
+        role: "",
     },
     {
         id:"king-candy",
@@ -22,6 +23,7 @@ var players = [
         healthPoint:120,
         attackPower:25,
         counterAttackPower:45,
+        role: "",
     },
     {   
         id:"tafyta",
@@ -30,6 +32,7 @@ var players = [
         healthPoint:130,
         attackPower:30,
         counterAttackPower:13,
+        role: "",
     },
     {
         id:"venellope",
@@ -38,88 +41,181 @@ var players = [
         healthPoint:140,
         attackPower:35,
         counterAttackPower:15,
+        role: "",
     },
 ];
 
 var myCharacter = false;
-var geneWasClicked = false;
-var kingWasClicked = false;
-var tafWasClicked = false;
-var venWasClicked = false;
+var opponent = false;
+var defeatedEnemies =[];
+var chars=[];
 
 // FUNCTIONS
 //=========================
+function fighter(player){
+    this.name = player.name;
+    this.hp = player.healthPoint;
+    this.baseAttackPower = player.attackPower;
+    this.counterAttackPo = player.counterAttackPower;
+    this.currentAttackPower = this.baseAttackPower;
+    this.role = player.role;
+    this.idTag = player.id;
+    this.imgSrc = player.img;
+
+
+    //method for fighter to take damage
+    this.takeDamage = function(num){
+        this.hp -= num;
+        $(this.name + "_charHP").text (this.hp);
+    };
+
+    //method to increase attack
+    this.increaseAttack = function(){
+        this.currentAttackPower += this.baseAttackPower;
+    };
+
+    //method to make fighter player
+    this.becomePlayer = function(){
+        this.role = 'player';
+    };
+
+    //method to make fighter enemy
+    this.makeEnemy = function(){
+        this.role = 'enemy';
+    };
+
+    //attack 
+    this.attack = function(character){
+        var stats = $("#battle-stats");
+        stats.append(this.name, "attacks", character.name, "for", this.currentAttackPower, "damage. </br>");
+
+        if(this.role === player){
+            character.takeDamage(this.currentAttackPower);
+            this.increaseAttack;
+            character.attack(this);
+        }
+        else if(this.role === enemy){
+            character.takeDamage(this.counterAttackPower);
+        }
+    };
+
+    //is dead
+    this.isDead = function(){
+        if(this.hp <= 0){
+            return true;
+        }
+        else{ return false;}
+    };
+
+};
+
+function win(){
+    var stats = $("#battle-stats").append("You Win!");
+    var newButton = $("button");
+    newButton.attr("id", "reset-btn").addClass("btn btn-outline-info").text("Replay");
+    stats.append(newButton);
+    $("#reset-btn").on("click", function(){
+        start();
+    });
+}
+
+function lose (){
+    var stats = $("#battle-stats").append("You Lose!  Rematch?");
+    var newButton = $("button");
+    newButton.attr("id", "reset-btn").addClass("btn btn-outline-info").text("Replay");
+    stats.append(newButton);
+    $("#reset-btn").on("click", function(){
+        start();
+    });
+}
+
+
+
 function start(){
+    //clears all fields
+
+
     //iterates over each object in array players
-   $.each(players, function(){
-       //creates a new div for each character object & adds class
-        var newDiv = $("<div></div>").addClass("charDiv rounded");
+    //defines them as a fighter object
+    //shows each on the DOM
+   $.each(players, function(i){
+       //create a fighter object of each player
+        fighter(players[i]);
         
-        //iterate over each key and value in the given object
-       $.each(this, function(name, value){
-            if(name === "id"){
-                // console.log ("id = " +value);
-                //if key === id: add value to div as id attribute
-                newDiv.attr("id", value);
-            }
 
-            if(name === "name"){
-                // console.log("name = "+ value);
-                //If key === name: create new p tag of character Name, add a class, & append to div
-                $("<p></p>").text(value).addClass("charName").appendTo(newDiv);
-            };
+       //creates a new div for each character object
+        var newDiv = $("<div></div>").attr("char-index", i).attr("id", players[i].id).addClass("charDiv rounded");
+        
+        //create p tage for character name, add to newDiv
+        $("<p></p>").text(players[i].name).addClass("charName").appendTo(newDiv);
 
-            if(name === "img"){
-                // console.log("img src= "+ value);
-                //if key === img: create new img tag, assign src to value, add class, & append to div
-                $("<img>").attr("src", value).addClass("charImg").appendTo(newDiv)
-            };
-            
-            if(name === "healthPoint"){
-                // console.log("hp = "+ value);
-                //if key === hp: create new p tag of hp value, add a class, & append to div
-                $("<p></p>").text(value).addClass("charHP").appendTo(newDiv);
-            }
-            //add all character divs to DOM in #players div
-            $("#players").append(newDiv);
-       });
+        //create img tag for character img, add to newDiv
+        $("<img>").attr("src", players[i].img).addClass("charImg").appendTo(newDiv);
+
+        //create p tage for character healthpoint, add to newDiv
+        $("<p></p>").text(players[i].healthPoint).attr("id", players[i].name + "_charHP").addClass("charHP").appendTo(newDiv);
+
+        //add character div to DOM in #players div
+        $("#players").append(newDiv);
    });
 
    //look for click on character, then set clicked to true
    //add class to clicked character & move character to "#my-player" div
-   $("#gene").on("click", function(){
-       if(!myCharacter){
-       myCharacter = true;
-       geneWasClicked = true;
-       $(this).addClass("myPlay");
-       $("#my-player").append(this);
-       };
-   });
-   $("#king-candy").on("click", function(){
-        if(!myCharacter){
-        myCharacter = true;
-        kingWasClicked = true;
-        $(this).addClass("myPlay");
-        $("#my-player").append(this);
-        };
-    });
-    $("#tafyta").on("click", function(){
-        if(!myCharacter){
-        myCharacter = true;
-        tafWasClicked = true;
-        $(this).addClass("myPlay");
-        $("#my-player").append(this);
-        };
-    });
-    $("#venellope").on("click", function(){
-        if(!myCharacter){
-        myCharacter = true;
-        venWasClicked = true;
-        $(this).addClass("myPlay");
-        $("#my-player").append(this);
-        };
-    });
+  $(".charDiv").on("click", function(event){
+        var target = $(this);
+        if (players[target.attr("char-index")].role === ""){
+            target.addClass("myPlay");
+            myCharacter = $(this);
 
+            for (let index = 0; index < players.length; index++) {
+                const element = players[index];
+                var playerIndex = parseInt(target.attr("char-index"));
+                if (index === playerIndex){
+                    element.becomePlayer();
+                }
+                else{
+                    element.makeEnemy();
+                    var enemy = $("#" + element.idTag);
+                    enemy.detach();
+                    enemy.addClass("enemy");
+                    enemy.appendTo("#enemies");
+                }
+                
+            }
+        }  
+        else if(players[target.attr("char-index")].role === "enemy" && !currentEnemy){
+            currentEnemy = $(this);
+            currentEnemy.detach();
+            currentEnemy.addClass("opponent");
+            currentEnemy.appendTo("#opponent");
+        }
+        else if(players[target.attr("char-index")].role === "player"){
+            alert("You've clicked the chosen player. Choose and enemy to fight.")
+        }
+  });
+
+  $("#attack-button").on("click", function(){
+      if (currentEnemy){
+          $("#battle-stats").empty();
+          var attacker = players[myCharacter.attr("char-index")];
+          var opponent = players[currentEnemy.attr("char-index")];
+          attacker.attack(opponent);
+          if (opponent.isDead()){
+              currentEnemy.detach();
+              defeatedEnemies.push(opponent);
+
+              if (defeatedEnemies.length === players.length -1){
+                  win();
+                  $(this).off();
+              }
+              currentEnemy =  null;
+          }
+          if (attacker.isDead()){
+              lose();
+              $(this).off();
+          }
+      }
+  })
 }
 
 

@@ -55,4 +55,9 @@ p{
 .myPlay{
     border: 5px solid violet;
 }
-
+.enemy{
+    background: tomato;
+}
+.opponent{
+    background: gray;
+}
