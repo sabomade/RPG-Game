@@ -67,7 +67,7 @@ function fighter(player){
     //method for fighter to take damage
     this.takeDamage = function(num){
         this.hp -= num;
-        $(this.name + "_charHP").text (this.hp);
+        $("#" + this.name + "_charHP").text (this.hp);
     };
 
     //method to increase attack
@@ -77,22 +77,22 @@ function fighter(player){
 
     //method to make fighter player
     this.becomePlayer = function(){
-        this.role = 'player';
+        this.role = "player";
     };
 
     //method to make fighter enemy
     this.makeEnemy = function(){
-        this.role = 'enemy';
+        this.role = "enemy";
     };
 
     //attack 
     this.attack = function(character){
         var stats = $("#battle-stats");
-        stats.append(this.name, "attacks", character.name, "for", this.currentAttackPower, "damage. </br>");
+        stats.append(this.name, " attacks ", character.name, " for ", this.currentAttackPower, " damage. </br>");
 
         if(this.role === "player"){
             character.takeDamage(this.currentAttackPower);
-            this.increaseAttack;
+            this.increaseAttack();
             character.attack(this);
         }
         else if(this.role === "enemy"){
