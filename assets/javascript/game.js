@@ -89,12 +89,12 @@ function fighter(player){
         var stats = $("#battle-stats");
         stats.append(this.name, "attacks", character.name, "for", this.currentAttackPower, "damage. </br>");
 
-        if(this.role === player){
+        if(this.role === "player"){
             character.takeDamage(this.currentAttackPower);
             this.increaseAttack;
             character.attack(this);
         }
-        else if(this.role === enemy){
+        else if(this.role === "enemy"){
             character.takeDamage(this.counterAttackPower);
         }
     };
@@ -106,7 +106,6 @@ function fighter(player){
         }
         else{ return false;}
     };
-
 };
 
 function win(){
@@ -139,10 +138,9 @@ function start(){
     //defines them as a fighter object
     //shows each on the DOM
    $.each(players, function(i){
-       //create a fighter object of each player
-        fighter(players[i]);
+       //create a fighter object of each player, adds to array chars
+        chars[i] = new fighter(players[i]);
         
-
        //creates a new div for each character object
         var newDiv = $("<div></div>").attr("char-index", i).attr("id", players[i].id).addClass("charDiv rounded");
         
@@ -159,17 +157,21 @@ function start(){
         $("#players").append(newDiv);
    });
 
+   opponent = null;
+   myCharacter = null;
+   defeatedEnemies = [];
+
    //look for click on character, then set clicked to true
    //add class to clicked character & move character to "#my-player" div
   $(".charDiv").on("click", function(event){
         var target = $(this);
-        if (players[target.attr("char-index")].role === ""){
-            target.addClass("myPlay");
+        if (chars[target.attr("char-index")].role === ""){
             myCharacter = $(this);
+            myCharacter.addClass("myPlay");
 
-            for (let index = 0; index < players.length; index++) {
-                const element = players[index];
-                var playerIndex = parseInt(target.attr("char-index"));
+            for (let index = 0; index < chars.length; index++) {
+                const element = chars[index];
+                var playerIndex = parseInt(myCharacter.attr("char-index"));
                 if (index === playerIndex){
                     element.becomePlayer();
                 }
@@ -183,40 +185,40 @@ function start(){
                 
             }
         }  
-        else if(players[target.attr("char-index")].role === "enemy" && !currentEnemy){
-            currentEnemy = $(this);
-            currentEnemy.detach();
-            currentEnemy.addClass("opponent");
-            currentEnemy.appendTo("#opponent");
+        else if(chars[target.attr("char-index")].role === "enemy" && !opponent){
+            opponent = $(this);
+            opponent.detach();
+            opponent.addClass("opponent");
+            opponent.appendTo("#opponent");
         }
-        else if(players[target.attr("char-index")].role === "player"){
-            alert("You've clicked the chosen player. Choose and enemy to fight.")
+        else if(chars[target.attr("char-index")].role === "player"){
+            alert("You've clicked the chosen player. Choose and enemy to fight.");
         }
   });
 
   $("#attack-button").on("click", function(){
-      if (currentEnemy){
+      if (opponent){
           $("#battle-stats").empty();
-          var attacker = players[myCharacter.attr("char-index")];
-          var opponent = players[currentEnemy.attr("char-index")];
+          var attacker = chars[myCharacter.attr("char-index")];
+          var opponent = chars[opponent.attr("char-index")];
           attacker.attack(opponent);
           if (opponent.isDead()){
-              currentEnemy.detach();
+              opponent.detach();
               defeatedEnemies.push(opponent);
 
-              if (defeatedEnemies.length === players.length -1){
+              if (defeatedEnemies.length === chars.length -1){
                   win();
                   $(this).off();
               }
-              currentEnemy =  null;
+              opponent =  null;
           }
           if (attacker.isDead()){
               lose();
               $(this).off();
           }
       }
-  })
-}
+  });
+};
 
 
 
