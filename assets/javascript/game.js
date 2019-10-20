@@ -42,7 +42,7 @@ var players = [
 //=========================
 function start(){
    $.each(players, function(){
-        var newDiv = $("<div></div>").addClass("charDiv");
+        var newDiv = $("<div></div>").addClass("charDiv rounded");
        $.each(this, function(name, value){
             if(name === "name"){
                 // console.log("name = "+ value);
