@@ -57,8 +57,8 @@ function fighter(player){
     this.name = player.name;
     this.hp = player.healthPoint;
     this.baseAttackPower = player.attackPower;
-    this.counterAttackPo = player.counterAttackPower;
     this.currentAttackPower = this.baseAttackPower;
+    this.counterAttackPo = player.counterAttackPower;
     this.role = player.role;
     this.idTag = player.id;
     this.imgSrc = player.img;
@@ -66,13 +66,18 @@ function fighter(player){
 
     //method for fighter to take damage
     this.takeDamage = function(num){
+        console.log( this.name, " currently has ", this.hp, " HP");
+        var hpStat = $("#" + this.name + "_charHP");
         this.hp -= num;
-        $("#" + this.name + "_charHP").text (this.hp);
+        console.log( this.name, " takes ", num, " damage. It's currdnt HP is now ", this.hp);
+        hpStat.text (this.hp);
     };
 
     //method to increase attack
     this.increaseAttack = function(){
+        console.log (this.name + " has attack power " + this.currentAttackPower);
         this.currentAttackPower += this.baseAttackPower;
+        console.log(this.name + " gets stronger! new attack power is "+ this.currentAttackPower);
     };
 
     //method to make fighter player
@@ -90,13 +95,17 @@ function fighter(player){
         var stats = $("#battle-stats");
         stats.append(this.name, " attacks ", character.name, " for ", this.currentAttackPower, " damage. </br>");
 
+        console.log(this.name, " attacks ", character.name);
+        console.log(this.name, " is the ", this.role);
+
         if(this.role === "player"){
             character.takeDamage(this.currentAttackPower);
             this.increaseAttack();
+            console.log(character.name, " strikes back!");
             character.attack(this);
         }
         else if(this.role === "enemy"){
-            character.takeDamage(this.counterAttackPower);
+            character.takeDamage(this.counterAttackPo);
         }
     };
 
@@ -143,16 +152,16 @@ function start(){
         chars[i] = new fighter(players[i]);
         
        //creates a new div for each character object
-        var newDiv = $("<div></div>").attr("char-index", i).attr("id", players[i].id).addClass("charDiv rounded");
+        var newDiv = $("<div></div>").attr("char-index", i).attr("id", chars[i].idTag).addClass("charDiv rounded");
         
         //create p tage for character name, add to newDiv
-        $("<p></p>").text(players[i].name).addClass("charName").appendTo(newDiv);
+        $("<p></p>").text(chars[i].name).addClass("charName").appendTo(newDiv);
 
         //create img tag for character img, add to newDiv
-        $("<img>").attr("src", players[i].img).addClass("charImg").appendTo(newDiv);
+        $("<img>").attr("src", chars[i].imgSrc).addClass("charImg").appendTo(newDiv);
 
         //create p tage for character healthpoint, add to newDiv
-        $("<p></p>").text(players[i].healthPoint).attr("id", players[i].name + "_charHP").addClass("charHP").appendTo(newDiv);
+        $("<p></p>").text(chars[i].hp).attr("id", chars[i].name + "_charHP").addClass("charHP").appendTo(newDiv);
 
         //add character div to DOM in #players div
         $("#players").append(newDiv);
@@ -205,9 +214,7 @@ function start(){
       if (opponent){
           $("#battle-stats").empty();
           var attacker = chars[myCharacter.attr("char-index")];
-          console.log("my character: " + attacker);
           var enemyOpp = chars[opponent.attr("char-index")];
-          console.log("opponent: " + opponent);
           attacker.attack(enemyOpp);
           if (enemyOpp.isDead()){
               opponent.detach();
