@@ -8,6 +8,7 @@ $( document ).ready(function() {
 //array of objects - players for this game
 var players = [
     {
+        id: "gene",
         name:"Gene",
         img: "assets/images/gene.png",
         healthPoint:100,
@@ -15,13 +16,15 @@ var players = [
         counterAttackPower:5,
     },
     {
+        id:"king-candy",
         name:"King Candy" ,
         img:"assets/images/kingCandy.png",
         healthPoint:120,
         attackPower:25,
         counterAttackPower:45,
     },
-    {
+    {   
+        id:"tafyta",
         name:"Tafyta",
         img:"assets/images/tafyta.png",
         healthPoint:130,
@@ -29,6 +32,7 @@ var players = [
         counterAttackPower:13,
     },
     {
+        id:"venellope",
         name:"Venellope",
         img:"assets/images/vanellope.png",
         healthPoint:140,
@@ -37,17 +41,24 @@ var players = [
     },
 ];
 
+var myCharacter = false;
 
 // FUNCTIONS
 //=========================
 function start(){
     //iterates over each object in array players
    $.each(players, function(){
-       //creates a new dive for each objedt
+       //creates a new div for each character object & adds class
         var newDiv = $("<div></div>").addClass("charDiv rounded");
         
         //iterate over each key and value in the given object
        $.each(this, function(name, value){
+            if(name === "id"){
+                // console.log ("id = " +value);
+                //if key === id: add value to div as id attribute
+                newDiv.attr("id", value);
+            }
+
             if(name === "name"){
                 // console.log("name = "+ value);
                 //If key === name: create new p tag of character Name, add a class, & append to div
@@ -70,7 +81,35 @@ function start(){
        });
    });
 
-
+   //look for click on character, then set clicked to true;
+   $("#gene").on("click", function(){
+       if(!myCharacter){
+       myCharacter = true;
+       $(this).addClass("myPlay");
+       $("#my-player").append(this);
+       };
+   });
+   $("#king-candy").on("click", function(){
+        if(!myCharacter){
+        myCharacter = true;
+        $(this).addClass("myPlay");
+        $("#my-player").append(this);
+        };
+    });
+    $("#tafyta").on("click", function(){
+        if(!myCharacter){
+        myCharacter = true;
+        $(this).addClass("myPlay");
+        $("#my-player").append(this);
+        };
+    });
+    $("#venellope").on("click", function(){
+        if(!myCharacter){
+        myCharacter = true;
+        $(this).addClass("myPlay");
+        $("#my-player").append(this);
+        };
+    });
 }
 
 
