@@ -168,6 +168,7 @@ function start(){
         if (chars[target.attr("char-index")].role === ""){
             myCharacter = $(this);
             myCharacter.addClass("myPlay");
+            myCharacter.appendTo("#my-player");
 
             for (let index = 0; index < chars.length; index++) {
                 const element = chars[index];
