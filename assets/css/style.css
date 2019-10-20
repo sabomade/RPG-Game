@@ -34,8 +34,8 @@ p{
     display: flex;
     flex-flow: column wrap;
     justify-content: space-evenly;
-    width: 20%;
-    margin: 0px 10px;
+    width: 150px;
+    margin: 5px 10px;
     background: whitesmoke;
 }
 
@@ -60,4 +60,13 @@ p{
 }
 .opponent{
     background: gray;
+}
+.attack{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.stats{
+    text-align: center; 
 }

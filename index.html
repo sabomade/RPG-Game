@@ -31,33 +31,46 @@
                 </div>
             </div>
             <div class="row">
-                <h3>Your Character</h3>
-                <div id ="my-player" class="col-md-12">
-                    <!-- chosen character displayed here -->
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3>Your Character</h3>
+                            <div id="my-player">
+                                <!-- chosen character displayed here -->
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h3>Opponent</h3>
+                            <div id="opponent">
+                            <!-- character you chose to fight displayed here -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 attack">
+                            <h3>Click Button to Attack</h3>
+                                <button type="button" id="attack-button" class="btn btn-outline-dark">Attack</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="battle-stats" class="col-md-12 stats">
+                            <!-- battle stat update displayed here after each attack -->
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <h3>Enemies Available to Attack</h3>
-                <div id="enemies" class="col-md-12 char">
+                <div class="col-md-4">
+                    <h3>Enemies Available to Attack</h3>
+                    <div id="enemies" class="char">
                     <!-- remaining characters [not chosen] displayed here -->
+                    </div>
                 </div>
             </div>
+            
             <div class="row">
-                <h3>Click Button to Attack</h3>
-                <div class="col-md-12">
-                     <button type="button" id="attack-button" class="btn btn-outline-dark">Attack</button>
-                </div>
-            </div>
-            <div class="row">
-                <h3>Opponent</h3>
-                <div id="opponent" class="col-md-12">
-                    <!-- character you chose to fight displayed here -->
-                </div>
-            </div>
-            <div class="row">
-                <div id="battle-stats" class="col-md-12">
+                <div id="battle-stats" class="col-md-8 stats">
                     <!-- battle stat update displayed here after each attack -->
                 </div>
+                <div class="col-md-4"></div>
             </div>
         </div>
 
