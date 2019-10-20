@@ -42,6 +42,10 @@ var players = [
 ];
 
 var myCharacter = false;
+var geneWasClicked = false;
+var kingWasClicked = false;
+var tafWasClicked = false;
+var venWasClicked = false;
 
 // FUNCTIONS
 //=========================
@@ -81,10 +85,12 @@ function start(){
        });
    });
 
-   //look for click on character, then set clicked to true;
+   //look for click on character, then set clicked to true
+   //add class to clicked character & move character to "#my-player" div
    $("#gene").on("click", function(){
        if(!myCharacter){
        myCharacter = true;
+       geneWasClicked = true;
        $(this).addClass("myPlay");
        $("#my-player").append(this);
        };
@@ -92,6 +98,7 @@ function start(){
    $("#king-candy").on("click", function(){
         if(!myCharacter){
         myCharacter = true;
+        kingWasClicked = true;
         $(this).addClass("myPlay");
         $("#my-player").append(this);
         };
@@ -99,6 +106,7 @@ function start(){
     $("#tafyta").on("click", function(){
         if(!myCharacter){
         myCharacter = true;
+        tafWasClicked = true;
         $(this).addClass("myPlay");
         $("#my-player").append(this);
         };
@@ -106,10 +114,12 @@ function start(){
     $("#venellope").on("click", function(){
         if(!myCharacter){
         myCharacter = true;
+        venWasClicked = true;
         $(this).addClass("myPlay");
         $("#my-player").append(this);
         };
     });
+
 }
 
 
