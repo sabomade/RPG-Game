@@ -20,7 +20,7 @@ h1, h2, h3, h4{
 
 p{
     font-family: 'Raleway', sans-serif;
-    padding-top: 5px;
+    /* padding-top: 5px; */
 }
 .row{
     margin: 10px auto;
@@ -70,3 +70,6 @@ p{
 .stats{
     text-align: center; 
 }
+/* .top{
+    z-index: 100;
+} */

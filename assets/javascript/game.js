@@ -93,7 +93,7 @@ function fighter(player){
     //attack 
     this.attack = function(character){
         var stats = $("#battle-stats");
-        stats.append(this.name, " attacks ", character.name, " for ", this.currentAttackPower, " damage. </br>");
+        stats.append("<p>" + this.name+ " attacks "+ character.name+ " for "+ this.currentAttackPower+ " damage. </p>");
 
         console.log(this.name, " attacks ", character.name);
         console.log(this.name, " is the ", this.role);
@@ -119,10 +119,10 @@ function fighter(player){
 };
 
 function endGame(){
-    var stats = $("#battle-stats").append("Game Over!");
-    var newButton = $("button");
-    newButton.attr("id", "reset-btn").addClass("btn btn-outline-info").text("Replay");
-    stats.append(newButton);
+    var stats = $("#battle-stats").append("<p>Game Over!</p>");
+    var newButton = $("<button>");
+    newButton.attr("id", "reset-btn").addClass("btn btn-info").text("Replay");
+    newButton.appendTo(stats);
     $("#reset-btn").on("click", function(){
         start();
     });
@@ -135,6 +135,8 @@ function start(){
     $("#my-player").empty();
     $("#opponent").empty();
     $("#enemies").empty();
+    $("#attack").empty();
+    $("#battle-stats").empty();
 
     //iterates over each object in array players
     //defines them as a fighter object
@@ -196,14 +198,21 @@ function start(){
             opponent.detach();
             opponent.addClass("opponent");
             opponent.appendTo("#opponent");
+
+            //write attack btn to DOM
+            var fightBtn = $("<button>");
+            fightBtn.attr("id", "fight-button").addClass("btn btn-outline-dark top").text("Attack");
+            fightBtn.appendTo("#attack");
+            // console.log("attack button created");
         }
         else if(chars[target.attr("char-index")].role === "player"){
             alert("You've clicked the chosen player. Choose and enemy to fight.");
         }
   });
 
-  $("#attack-button").on("click", function(){
+  $("#attack").on("click", function(){
       if (opponent){
+          console.log("fight-button clicked");
           $("#battle-stats").empty();
           var attacker = chars[myCharacter.attr("char-index")];
           var enemyOpp = chars[opponent.attr("char-index")];
@@ -211,6 +220,7 @@ function start(){
           if (enemyOpp.isDead()){
               opponent.detach();
               defeatedEnemies.push(opponent);
+              $("#attack").empty();
 
               if (defeatedEnemies.length === chars.length -1){
                   endGame();
