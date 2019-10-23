@@ -18,7 +18,7 @@ var players = [
     },
     {
         id:"king-candy",
-        name:"King Candy" ,
+        name:"King-Candy" ,
         img:"assets/images/kingCandy.png",
         healthPoint:120,
         attackPower:25,
@@ -118,18 +118,8 @@ function fighter(player){
     };
 };
 
-function win(){
-    var stats = $("#battle-stats").append("You Win!");
-    var newButton = $("button");
-    newButton.attr("id", "reset-btn").addClass("btn btn-outline-info").text("Replay");
-    stats.append(newButton);
-    $("#reset-btn").on("click", function(){
-        start();
-    });
-}
-
-function lose (){
-    var stats = $("#battle-stats").append("You Lose!  Rematch?");
+function endGame(){
+    var stats = $("#battle-stats").append("Game Over!");
     var newButton = $("button");
     newButton.attr("id", "reset-btn").addClass("btn btn-outline-info").text("Replay");
     stats.append(newButton);
@@ -142,7 +132,9 @@ function lose (){
 
 function start(){
     //clears all fields
-
+    $("#my-player").empty();
+    $("#opponent").empty();
+    $("#enemies").empty();
 
     //iterates over each object in array players
     //defines them as a fighter object
@@ -221,14 +213,12 @@ function start(){
               defeatedEnemies.push(opponent);
 
               if (defeatedEnemies.length === chars.length -1){
-                  win();
-                  $(this).off();
+                  endGame();
               }
               opponent =  null;
           }
           if (attacker.isDead()){
-              lose();
-              $(this).off();
+              endGame();
           }
       }
   });
