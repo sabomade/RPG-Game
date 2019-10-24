@@ -12,7 +12,7 @@ var players = [
         name:"Gene",
         img: "assets/images/gene.png",
         healthPoint:100,
-        attackPower:15,
+        attackPower:5,
         counterAttackPower:5,
         role: "",
     },
@@ -21,8 +21,8 @@ var players = [
         name:"King-Candy" ,
         img:"assets/images/kingCandy.png",
         healthPoint:120,
-        attackPower:25,
-        counterAttackPower:45,
+        attackPower:10,
+        counterAttackPower:10,
         role: "",
     },
     {   
@@ -30,7 +30,7 @@ var players = [
         name:"Tafyta",
         img:"assets/images/tafyta.png",
         healthPoint:130,
-        attackPower:30,
+        attackPower:13,
         counterAttackPower:13,
         role: "",
     },
@@ -39,8 +39,8 @@ var players = [
         name:"Venellope",
         img:"assets/images/vanellope.png",
         healthPoint:140,
-        attackPower:35,
-        counterAttackPower:15,
+        attackPower:11,
+        counterAttackPower:11,
         role: "",
     },
 ];
@@ -57,7 +57,7 @@ function fighter(player){
     this.name = player.name;
     this.hp = player.healthPoint;
     this.baseAttackPower = player.attackPower;
-    this.currentAttackPower = this.baseAttackPower;
+    this.currentAttackPo = this.baseAttackPower;
     this.counterAttackPo = player.counterAttackPower;
     this.role = player.role;
     this.idTag = player.id;
@@ -75,9 +75,9 @@ function fighter(player){
 
     //method to increase attack
     this.increaseAttack = function(){
-        console.log (this.name + " has attack power " + this.currentAttackPower);
-        this.currentAttackPower += this.baseAttackPower;
-        console.log(this.name + " gets stronger! new attack power is "+ this.currentAttackPower);
+        console.log (this.name + " has attack power " + this.currentAttackPo);
+        this.currentAttackPo += this.baseAttackPower;
+        console.log(this.name + " gets stronger! new attack power is "+ this.currentAttackPo);
     };
 
     //method to make fighter player
@@ -93,19 +93,24 @@ function fighter(player){
     //attack 
     this.attack = function(character){
         var stats = $("#battle-stats");
-        stats.append("<p>" + this.name+ " attacks "+ character.name+ " for "+ this.currentAttackPower+ " damage. </p>");
+        // stats.append("<p>" + this.name+ " attacks "+ character.name+ " for "+ this.currentAttackPo+ " damage. </p>");
 
         console.log(this.name, " attacks ", character.name);
         console.log(this.name, " is the ", this.role);
 
         if(this.role === "player"){
-            character.takeDamage(this.currentAttackPower);
+            stats.append("<p>" + this.name+ " attacks "+ character.name+ " for "+ this.currentAttackPo+ " damage. </p>");
+
+            character.takeDamage(this.currentAttackPo);
             this.increaseAttack();
             console.log(character.name, " strikes back!");
             character.attack(this);
         }
         else if(this.role === "enemy"){
+            stats.append("<p>" + this.name+ " attacks "+ character.name+ " for "+ this.counterAttackPo+ " damage. </p>");
+
             character.takeDamage(this.counterAttackPo);
+            // console.log(this.name, " has role ", this.role, " with counterAttackPower = ", this.counterAttackPo);
         }
     };
 
@@ -119,6 +124,10 @@ function fighter(player){
 };
 
 function endGame(){
+    //clears attack button
+    $("#attack").empty();
+
+    //prints game over sets up replay button
     var stats = $("#battle-stats").append("<p>Game Over!</p>");
     var newButton = $("<button>");
     newButton.attr("id", "reset-btn").addClass("btn btn-info").text("Replay");
@@ -128,15 +137,18 @@ function endGame(){
     });
 }
 
-
+// MAIN PROCESS
+//==============================
 
 function start(){
+    console.log ("-------new game--------");
     //clears all fields
     $("#my-player").empty();
     $("#opponent").empty();
     $("#enemies").empty();
     $("#attack").empty();
     $("#battle-stats").empty();
+    chars=[];
 
     //iterates over each object in array players
     //defines them as a fighter object
@@ -209,36 +221,27 @@ function start(){
             alert("You've clicked the chosen player. Choose and enemy to fight.");
         }
   });
-
-  $("#attack").on("click", function(){
-      if (opponent){
-          console.log("fight-button clicked");
-          $("#battle-stats").empty();
-          var attacker = chars[myCharacter.attr("char-index")];
-          var enemyOpp = chars[opponent.attr("char-index")];
-          attacker.attack(enemyOpp);
-          if (enemyOpp.isDead()){
-              opponent.detach();
-              defeatedEnemies.push(opponent);
-              $("#attack").empty();
-
-              if (defeatedEnemies.length === chars.length -1){
-                  endGame();
-              }
-              opponent =  null;
-          }
-          if (attacker.isDead()){
-              endGame();
-          }
-      }
-  });
 };
 
+$("#attack").on("click", function(){
+    if (opponent){
+        console.log("ATTACK DIV CLICKED");
+        $("#battle-stats").empty();
+        var attacker = chars[myCharacter.attr("char-index")];
+        var enemyOpp = chars[opponent.attr("char-index")];
+        attacker.attack(enemyOpp);
+        if (enemyOpp.isDead()){
+            opponent.detach();
+            defeatedEnemies.push(opponent);
+            $("#attack").empty();
 
-
-
-
-
-
-// MAIN PROCESS
-//=========================
+            if (defeatedEnemies.length === chars.length -1){
+                endGame();
+            }
+            opponent =  null;
+        }
+        if (attacker.isDead()){
+            endGame();
+        }
+    }
+});
