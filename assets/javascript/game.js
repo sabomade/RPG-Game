@@ -181,6 +181,7 @@ function start(){
    //add class to clicked character & move character to "#my-player" div
   $(".charDiv").on("click", function(event){
         var target = $(this);
+        console.log(target);
         if (chars[target.attr("char-index")].role === ""){
             myCharacter = $(this);
             myCharacter.addClass("myPlay");
