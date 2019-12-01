@@ -16,5 +16,5 @@ Click on a character to begin, that becomes your character the others your enemi
 This is the only version and is maintained by me, [sabomade](https://github.com/sabomade).
 
 ## Acknowledgements
-Built & completed as part of the UCB Coding Bootcamp, Homework 4: Javascript (option 2)
+Built & completed as part of the UCB Coding Bootcamp, Homework 4: Javascript & JQuery (option 2)
 
